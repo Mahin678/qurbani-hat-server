@@ -3,7 +3,8 @@ const cors = require("cors")
 const bodyPerser = require("body-parser");
 const { MongoClient,ObjectId } = require('mongodb');
 const app = express();
-const port = 3000
+const port = 3000;
+require("dotenv").config();
 app.use(cors());
 app.use(bodyPerser.json());
 // db connection 
@@ -31,9 +32,8 @@ client.connect(err => {
   //Delete
   app.delete("/delete/:id",(req,res)=>{
       collection.deleteOne({_id:ObjectId(req.params.id)})
-      .then(result=>console.log(result.deletedCount))
+      .then(result=>res.send("Succesfully deleted"))
   })
-  console.log("db connected");
 });
 
 
@@ -42,6 +42,6 @@ app.get('/', (req, res) => {
 })
 
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   console.log(`app listening at http://localhost:${port}`)
 })
