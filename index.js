@@ -44,13 +44,23 @@ client.connect(err => {
           res.send(data)
       })    
   });
+  // Update 
+  app.patch("/updateService/:id",(req,res)=>{
+    const id = parseInt(req.params.id)
+    serviceCollection.updateOne({id},
+      {
+        $set:{desc:req.body.desc}
+      })
+      .then(result=>res.send("Succesfully updated"))
+  })
   //Delete
   app.delete("/deleteCow/:id",(req,res)=>{
     cowCollection.deleteOne({_id:ObjectId(req.params.id)})
       .then(result=>res.send("Succesfully deleted"))
   })
   app.delete("/deleteService/:id",(req,res)=>{
-    serviceCollection.deleteOne({_id:ObjectId(req.params.id)})
+    const id = parseInt(req.params.id)
+    serviceCollection.deleteOne({id})
       .then(result=>res.send("Succesfully deleted"))
   })
 });
