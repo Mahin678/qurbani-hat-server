@@ -44,6 +44,13 @@ client.connect(err => {
           res.send(data)
       })    
   });
+  // get by filter
+  app.get("/allCows/:categori",(req,res)=>{
+    cowCollection.find({categori:req.params.categori})
+    .toArray((err,data)=>{
+      res.send(data)
+    })
+  })
   // Update 
   app.patch("/updateService/:id",(req,res)=>{
     const id = parseInt(req.params.id)
