@@ -60,12 +60,36 @@ client.connect(err => {
   })
   // Update 
   app.patch("/updateService/:id",(req,res)=>{
-    const id = parseInt(req.params.id)
-    serviceCollection.updateOne({id},
+    serviceCollection.updateOne({_id:ObjectId(req.params.id)},
       {
-        $set:{desc:req.body.desc}
+        $set:{
+          description:req.body.description,
+          serial:req.params.serial,
+          title:req.params.title
+        }
       })
       .then(result=>res.send("Succesfully updated"))
+  })
+  app.patch("/updateCowInfo/:id",(req,res)=>{
+    cowCollection.updateOne({_id:ObjectId(req.params.id)},
+      {
+        $set:{
+          video:req.body.video,
+          code:req.body.code,
+          categori:req.body.categori,
+          address:req.body.address,
+          type:req.body.type,
+          age:req.body.age,
+          teeth:req.body.teeth,
+          owner:req.body.owner,
+          price:req.body.price,
+          thana:req.body.thana,
+          weight:req.body.weight,
+          height:req.body.height,
+          contact:req.body.contact
+        }
+      })
+      .then(result=>console.log(result.modifiedCount))
   })
   //Delete
   app.delete("/deleteCow/:id",(req,res)=>{
@@ -73,8 +97,7 @@ client.connect(err => {
       .then(result=>res.send("Succesfully deleted"))
   })
   app.delete("/deleteService/:id",(req,res)=>{
-    const id = parseInt(req.params.id)
-    serviceCollection.deleteOne({id})
+    serviceCollection.deleteOne({_id:ObjectId(req.params.id)})
       .then(result=>res.send("Succesfully deleted"))
   })
 });
