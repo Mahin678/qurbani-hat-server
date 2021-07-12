@@ -38,6 +38,13 @@ client.connect(err => {
           res.send(data)
       })    
   });
+  // cow get by id
+  app.get("/allCow/:id",(req,res)=>{
+    cowCollection.find({_id:ObjectId(req.params.id)})
+      .toArray((err,data)=>{
+        res.send(data)
+      })
+  })
   app.get("/allServices",(req,res)=>{
     serviceCollection.find({})
       .toArray((err,data)=>{
