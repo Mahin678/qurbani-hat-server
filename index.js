@@ -17,9 +17,10 @@ client.connect(err => {
   // Post
   app.post("/addCow",(req,res)=>{
       const cow = req.body;
+      console.log(cow)
       cowCollection.insertOne(cow)
       .then(result=>{
-        res.send("success")
+        res.send(result)
       })
   });
   app.post("/addService",(req,res)=>{
