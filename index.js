@@ -4,16 +4,20 @@ const bodyPerser = require("body-parser");
 const { MongoClient,ObjectId } = require('mongodb');
 const app = express();
 const port = 3000;
+let Vimeo = require('vimeo').Vimeo;
 require("dotenv").config();
 app.use(cors());
 app.use(bodyPerser.json());
 // db connection 
 
-const uri = "mongodb+srv://MyDbUser:gorurhat@cluster0.bssu4.mongodb.net/cowdb?retryWrites=true&w=majority";
+// const uri = "mongodb+srv://MyDbUser:gorurhat@cluster0.bssu4.mongodb.net/cowdb?retryWrites=true&w=majority";
+const uri = "mongodb+srv://volunteer-network-main:volunteer-network-main123@cluster0.odwvb.mongodb.net/qurbanihat?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+
 client.connect(err => {
-  const cowCollection = client.db("cowdb").collection("cows");
-  const serviceCollection = client.db("cowdb").collection("services");
+  const cowCollection = client.db("qurbanihat").collection("cow");
+  // const serviceCollection = client.db("qurbanihat").collection("cow");
   // Post
   app.post("/addCow",(req,res)=>{
       const cow = req.body;
@@ -26,10 +30,9 @@ client.connect(err => {
       const service = req.body;
       serviceCollection.insertOne(service)
       .then(result=>{
-        console.log(result)
         res.send("success")
       })
-      console.log(service)
+      
   });
   // Get
   app.get("/allCows",(req,res)=>{
@@ -73,39 +76,31 @@ client.connect(err => {
   app.patch("/updateCowInfo/:id",(req,res)=>{
     cowCollection.updateOne({_id:ObjectId(req.params.id)},
       {
-        $set:{
-          video:req.body.video,
-          code:req.body.code,
-          categori:req.body.categori,
-          address:req.body.address,
-          type:req.body.type,
-          age:req.body.age,
-          teeth:req.body.teeth,
-          owner:req.body.owner,
-          price:req.body.price,
-          thana:req.body.thana,
-          weight:req.body.weight,
-          height:req.body.height,
-          contact:req.body.contact
-        }
+        $set: req.body
       })
-      .then(result=>console.log(result.modifiedCount))
+      .then(result=> 
+          {
+            if(result.modifiedCount){
+              res.send(200)
+            }
+          }
+        )
   })
   //Delete
   app.delete("/deleteCow/:id",(req,res)=>{
     cowCollection.deleteOne({_id:ObjectId(req.params.id)})
-      .then(result=>res.send("Succesfully deleted"))
+      .then(result=>res.send(result))
   })
   app.delete("/deleteService/:id",(req,res)=>{
     serviceCollection.deleteOne({_id:ObjectId(req.params.id)})
       .then(result=>res.send("Succesfully deleted"))
   })
-});
+}
+
+);
 
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+
 
 
 app.listen(process.env.PORT || port, () => {
