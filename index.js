@@ -48,7 +48,17 @@ client.connect(err => {
         res.send(data)
       })
   })
+    // cow get by user id
+    app.get("/userCow/:email",(req,res)=>{
+      cowCollection.find({email:req.params.email})
+        .toArray((err,data)=>{
+          res.send(data)  
+          // console.log(data)
+        })
+    })
   
+
+  // get all service
   app.get("/allServices",(req,res)=>{
     serviceCollection.find({})
       .toArray((err,data)=>{
